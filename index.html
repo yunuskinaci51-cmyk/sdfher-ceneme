@@ -1,1 +1,1400 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Özel Hediye</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            touch-action: manipulation;
+            padding: 10px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            height: 100vh;
+            max-height: -webkit-fill-available;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .page {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            padding: 15px;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        
+        .active {
+            display: flex;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #ff0000;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            line-height: 1.3;
+        }
+        
+        h2 {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+            color: #ff0000;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            line-height: 1.3;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #ff0000;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            line-height: 1.3;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #ff0000;
+            line-height: 1.5;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            margin: 8px 0;
+            width: 85%;
+            max-width: 250px;
+        }
+        
+        .btn:hover, .btn:active {
+            background-color: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+        }
+        
+        .btn-move {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .gif-container {
+            margin: 10px 0;
+            width: 90%;
+            max-width: 280px;
+            flex-shrink: 0;
+        }
+        
+        .gif-container img {
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+            object-fit: contain;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            font-size: 1rem;
+            color: #ff0000;
+            padding: 0 10px;
+            flex-wrap: wrap;
+            text-align: center;
+        }
+        
+        .checkbox-container input {
+            margin-right: 8px;
+            transform: scale(1.3);
+        }
+        
+        .yes-no-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .yes-btn {
+            background-color: #4CAF50;
+            width: 85%;
+            max-width: 250px;
+            transition: all 0.5s ease;
+        }
+        
+        .no-btn {
+            background-color: #f44336;
+            width: 85%;
+            max-width: 250px;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+        
+        .heart {
+            color: red;
+            font-size: 2.2rem;
+            margin: 5px 0;
+            animation: heartbeat 1.5s ease-in-out infinite both;
+        }
+        
+        @keyframes heartbeat {
+            from {
+                transform: scale(1);
+                transform-origin: center center;
+                animation-timing-function: ease-out;
+            }
+            10% {
+                transform: scale(0.91);
+                animation-timing-function: ease-in;
+            }
+            17% {
+                transform: scale(0.98);
+                animation-timing-function: ease-out;
+            }
+            33% {
+                transform: scale(0.87);
+                animation-timing-function: ease-in;
+            }
+            45% {
+                transform: scale(1);
+                animation-timing-function: ease-out;
+            }
+        }
+        
+        .final-gif {
+            margin: 5px 0;
+            width: 95%;
+            max-width: 320px;
+        }
+        
+        .final-gif img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            max-height: 250px;
+        }
+        
+        .page-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 100%;
+            padding: 15px 0;
+        }
+        
+        .text-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            width: 100%;
+            position: relative;
+        }
+        
+        .buttons-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        .gif-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            width: 100%;
+            margin-top: auto;
+        }
+        
+        /* 4. SAYFA ÖZEL DÜZENİ - BÜYÜK GIF ÜSTTE, YAZILAR ORTADA, BUTONLAR YAZININ ALTINDA */
+        .page4-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            height: 100%;
+            padding: 10px 0;
+        }
+        
+        .gif-top {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            margin-bottom: 5px;
+            flex: 0 0 auto;
+        }
+        
+        .text-middle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin: 10px 0;
+            flex: 0 0 auto;
+        }
+        
+        .buttons-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: 5px;
+            flex: 0 0 auto;
+        }
+        
+        /* 5. SAYFA - FOTOĞRAF SEÇİMİ */
+        .page5-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            height: 100%;
+            padding: 15px 0;
+        }
+        
+        .top-message {
+            font-size: 1.3rem;
+            color: #ff0000;
+            margin-bottom: 15px;
+            text-align: center;
+            line-height: 1.4;
+            font-weight: bold;
+        }
+        
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px 0;
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .photo-item {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .photo-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .photo-item.selected {
+            border: 3px solid #ff6b6b;
+            transform: scale(1.05);
+        }
+        
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .photo-radio {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 15px;
+            padding: 5px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .selection-message {
+            font-size: 1.4rem;
+            color: #ff0000;
+            margin: 20px 0;
+            text-align: center;
+            line-height: 1.4;
+            font-weight: bold;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .wrong-selection-message {
+            font-size: 1.4rem;
+            color: #ff0000;
+            margin: 20px 0;
+            text-align: center;
+            line-height: 1.4;
+            font-weight: bold;
+            animation: shake 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .continue-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            margin: 8px 0;
+            width: 85%;
+            max-width: 250px;
+        }
+        
+        .continue-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .try-again-btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            margin: 8px 0;
+            width: 85%;
+            max-width: 250px;
+        }
+        
+        /* 6. SAYFA - HALA MUTLU MUSUN? */
+        .page6-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .final-message {
+            font-size: 1.3rem;
+            color: #ff0000;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .big-heart {
+            font-size: 4rem;
+            color: red;
+            margin: 20px 0;
+            animation: heartbeat 1.5s ease-in-out infinite both;
+        }
+        
+        /* 7. SAYFA - KONUŞMAYA NE DERSİN? */
+        .page7-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        /* 8. SAYFA - SON SAYFA */
+        .page8-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .end-btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            width: 85%;
+            max-width: 250px;
+        }
+        
+        /* Ses kontrolü butonu */
+        .audio-control {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        /* Küçük ekranlar için ekstra ayarlamalar */
+        @media (max-height: 700px) {
+            h1 {
+                font-size: 1.6rem;
+                margin-bottom: 10px;
+            }
+            
+            h2 {
+                font-size: 1.4rem;
+                margin-bottom: 6px;
+            }
+            
+            h3 {
+                font-size: 1.3rem;
+                margin-bottom: 10px;
+            }
+            
+            p {
+                font-size: 1rem;
+                margin-bottom: 6px;
+            }
+            
+            .gif-container {
+                margin: 8px 0;
+                max-width: 220px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+                margin: 6px 0;
+            }
+            
+            .final-gif {
+                margin: 3px 0;
+                max-width: 280px;
+            }
+            
+            .final-gif img {
+                max-height: 200px;
+            }
+            
+            .gif-top {
+                margin-bottom: 3px;
+            }
+            
+            .text-middle {
+                margin: 8px 0;
+            }
+            
+            .buttons-bottom {
+                margin-top: 3px;
+            }
+            
+            .audio-control {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .photos-grid {
+                gap: 10px;
+                padding: 8px;
+            }
+            
+            .top-message {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            
+            .selection-message {
+                font-size: 1.2rem;
+                margin: 15px 0;
+            }
+            
+            .wrong-selection-message {
+                font-size: 1.2rem;
+                margin: 15px 0;
+            }
+            
+            .final-message {
+                font-size: 1.2rem;
+            }
+            
+            .big-heart {
+                font-size: 3rem;
+                margin: 15px 0;
+            }
+            
+            .end-btn {
+                margin: 15px 0;
+            }
+        }
+        
+        @media (max-height: 600px) {
+            h1 {
+                font-size: 1.4rem;
+            }
+            
+            h2 {
+                font-size: 1.3rem;
+                margin-bottom: 4px;
+            }
+            
+            h3 {
+                font-size: 1.2rem;
+                margin-bottom: 8px;
+            }
+            
+            p {
+                font-size: 0.9rem;
+                margin-bottom: 4px;
+            }
+            
+            .gif-container {
+                max-width: 180px;
+                margin: 5px 0;
+            }
+            
+            .btn {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .heart {
+                font-size: 1.8rem;
+                margin: 3px 0;
+            }
+            
+            .final-gif {
+                max-width: 240px;
+                margin: 2px 0;
+            }
+            
+            .final-gif img {
+                max-height: 180px;
+            }
+            
+            .page4-content {
+                padding: 5px 0;
+            }
+            
+            .gif-top {
+                margin-bottom: 2px;
+            }
+            
+            .text-middle {
+                margin: 6px 0;
+            }
+            
+            .buttons-bottom {
+                margin-top: 2px;
+            }
+            
+            .photos-grid {
+                gap: 8px;
+                padding: 6px;
+            }
+            
+            .top-message {
+                font-size: 1.1rem;
+                margin-bottom: 8px;
+            }
+            
+            .selection-message {
+                font-size: 1.1rem;
+                margin: 10px 0;
+            }
+            
+            .wrong-selection-message {
+                font-size: 1.1rem;
+                margin: 10px 0;
+            }
+            
+            .final-message {
+                font-size: 1.1rem;
+                margin-bottom: 15px;
+            }
+            
+            .big-heart {
+                font-size: 2.5rem;
+                margin: 10px 0;
+            }
+            
+            .end-btn {
+                margin: 10px 0;
+            }
+        }
+        
+        /* Yatay mod için ayarlamalar */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .page {
+                padding: 10px;
+            }
+            
+            .yes-no-container {
+                flex-direction: row;
+                gap: 15px;
+            }
+            
+            .yes-btn, .no-btn {
+                width: auto;
+                min-width: 120px;
+            }
+            
+            .page-content {
+                padding: 10px 0;
+            }
+            
+            .page4-content {
+                padding: 5px 0;
+            }
+            
+            .page5-content {
+                padding: 10px 0;
+            }
+            
+            .final-gif {
+                max-width: 280px;
+            }
+            
+            .final-gif img {
+                max-height: 200px;
+            }
+            
+            .photos-grid {
+                grid-template-columns: repeat(3, 1fr);
+                max-height: 60vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ses kontrol butonu -->
+    <button class="audio-control" id="audioControl" onclick="toggleAudio()">🔇</button>
+    
+    <!-- Gizli audio element -->
+    <audio id="backgroundMusic" loop>
+        <source src="https://raw.githubusercontent.com/yunuskinaci51-cmyk/sdfher-ceneme/main/mizik.mp3" type="audio/mpeg">
+        Tarayıcınız audio elementini desteklemiyor.
+    </audio>
 
+    <div class="container">
+        <!-- Sayfa 1 -->
+        <div class="page active" id="page1">
+            <div class="page-content">
+                <div class="text-section">
+                    <h1>Sana Özel Bir Hediye</h1>
+                    <p>Devamını görmek için tıkla</p>
+                    <div class="gif-container">
+                        <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNW0zY3Y0czZ1NzN3Yzd4YjRucTNoYWxqcG9heXJicTVpOXJ0ZzFldiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/VM1fcpu2bKs1e2Kdbj/giphy.gif" alt="Sevimli GIF">
+                    </div>
+                </div>
+                <div class="buttons-section">
+                    <button class="btn" onclick="nextPage(2)">Tıkla</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sayfa 2 -->
+        <div class="page" id="page2">
+            <div class="page-content">
+                <div class="text-section">
+                    <h2>Doğum Günün Kutlu Olsun!</h2>
+                    <p>Nice senelere...</p>
+                    <div class="gif-container">
+                        <img src="https://media1.tenor.com/m/sz-XG3TLQx8AAAAd/bugcat-capoo.gif" alt="Doğum günü GIF">
+                    </div>
+                </div>
+                <div class="buttons-section">
+                    <button class="btn" onclick="startAudioAndNextPage()">Devam Et</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sayfa 3 -->
+        <div class="page" id="page3">
+            <div class="page-content">
+                <div class="text-section">
+                    <div class="gif-container">
+                        <img src="https://media.tenor.com/0hQO5tgGGrYAAAAm/capoo.webp" alt="Capoo">
+                    </div>
+                    <h2>Sana Bir Sorum Olacak</h2>
+                    
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="agreeCheckbox">
+                        <label for="agreeCheckbox">Okudum ve kabul ediyorum</label>
+                    </div>
+                </div>
+                <div class="buttons-section">
+                    <button class="btn btn-move" id="movingBtn" onclick="handleMovingButton()">Tıkla</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sayfa 4 -->
+        <div class="page" id="page4">
+            <div class="page4-content">
+                <div class="gif-top">
+                    <div class="final-gif">
+                        <img src="https://media.tenor.com/6foaT9raMTcAAAAi/bug-cat.gif" alt="Mutlu GIF">
+                    </div>
+                </div>
+                
+                <div class="text-middle">
+                    <h2>Seni Seviyorum <span class="heart">❤️</span></h2>
+                    <p>Sen beni hala seviyor musun?</p>
+                </div>
+                
+                <div class="buttons-bottom">
+                    <div class="yes-no-container">
+                        <button class="btn yes-btn" id="yesBtn" onclick="handleYes()">Evet</button>
+                        <button class="btn no-btn" id="noBtn" onclick="handleNo()">Hayır</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sayfa 5 - FOTOĞRAF SEÇİMİ -->
+        <div class="page" id="page5">
+            <div class="page5-content">
+                <div class="text-section">
+                    <!-- ÜST MESAJ -->
+                    <div class="top-message">
+                        Burada nasıl mutluyuz, sende farkında mısın?<br>
+                        Hangi fotoğrafı daha çok beğendin?
+                    </div>
+                    
+                    <!-- DOĞRU SEÇİM MESAJI (GİZLİ) -->
+                    <div class="selection-message" id="selectionMessage" style="display: none;">
+                        Ben de biliyordum bu fotoğrafı seçeceğini! ❤️
+                    </div>
+                    
+                    <!-- YANLIŞ SEÇİM MESAJI (GİZLİ) -->
+                    <div class="wrong-selection-message" id="wrongSelectionMessage" style="display: none;">
+                        Hayır, bu fotoğraf değil! Lütfen doğru fotoğrafı seç ❤️
+                    </div>
+                    
+                    <!-- FOTOĞRAF GALERİSİ -->
+                    <div class="photos-grid" id="photosGrid">
+                        <!-- Fotoğraf 1 - SOL ÜST (YANLIŞ) -->
+                        <div class="photo-item" onclick="selectPhoto(1)">
+                            <img src="https://raw.githubusercontent.com/yunuskinaci51-cmyk/sdfher-ceneme/main/WhatsApp%20Image%202025-10-29%20at%2021.38.33.jpeg" alt="Anımız 1">
+                            <button class="photo-radio" onclick="event.stopPropagation(); selectPhoto(1)">Bu Fotoğrafı Seç</button>
+                        </div>
+                        
+                        <!-- Fotoğraf 2 - SAĞ ÜST (YANLIŞ) -->
+                        <div class="photo-item" onclick="selectPhoto(2)">
+                            <img src="https://raw.githubusercontent.com/yunuskinaci51-cmyk/sdfher-ceneme/main/WhatsApp%20Image%202025-10-29%20at%2021.38.30.jpeg" alt="Anımız 2">
+                            <button class="photo-radio" onclick="event.stopPropagation(); selectPhoto(2)">Bu Fotoğrafı Seç</button>
+                        </div>
+                        
+                        <!-- Fotoğraf 3 - SOL ALT (DOĞRU) -->
+                        <div class="photo-item" onclick="selectPhoto(3)">
+                            <img src="https://raw.githubusercontent.com/yunuskinaci51-cmyk/sdfher-ceneme/main/WhatsApp%20Image%202025-10-29%20at%2021.38.30%20(1).jpeg" alt="Anımız 3">
+                            <button class="photo-radio" onclick="event.stopPropagation(); selectPhoto(3)">Bu Fotoğrafı Seç</button>
+                        </div>
+                        
+                        <!-- Fotoğraf 4 - SAĞ ALT (DOĞRU) -->
+                        <div class="photo-item" onclick="selectPhoto(4)">
+                            <img src="https://raw.githubusercontent.com/yunuskinaci51-cmyk/sdfher-ceneme/main/WhatsApp%20Image%202025-10-29%20at%2021.38.29.jpeg" alt="Anımız 4">
+                            <button class="photo-radio" onclick="event.stopPropagation(); selectPhoto(4)">Bu Fotoğrafı Seç</button>
+                        </div>
+                    </div>
+                    
+                    <!-- DEVAM ET BUTONU -->
+                    <button class="continue-btn" id="continueBtn5" onclick="goToPage6()" disabled>Devam Et</button>
+                    
+                    <!-- TEKRAR DENE BUTONU -->
+                    <button class="try-again-btn" id="tryAgainBtn" onclick="resetSelection()" style="display: none;">Tekrar Dene</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sayfa 6 - HALA MUTLU MUSUN? -->
+        <div class="page" id="page6">
+            <div class="page6-content">
+                <div class="text-section">
+                    <h2>Hala bu kadar mutlu olabiliriz! ❤️</h2>
+                    <p class="final-message">Seninle her an daha da mutlu olabileceğimize inanıyorum...</p>
+                    
+                    <div class="yes-no-container">
+                        <button class="btn yes-btn" id="yesBtn6" onclick="handleYes6()">Evet</button>
+                        <button class="btn no-btn" id="noBtn6" onclick="handleNo6()">Hayır</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sayfa 7 - O ZAMAN YAZISI -->
+        <div class="page" id="page7">
+            <div class="page7-content">
+                <div class="text-section">
+                    <h2>O zaman... ❤️</h2>
+                    <p class="final-message">Konuşmaya ne dersin?</p>
+                    
+                    <div class="yes-no-container">
+                        <button class="btn yes-btn" onclick="handleYes7()">Evet</button>
+                        <button class="btn no-btn" id="noBtn7" onclick="handleNo7()">Hayır</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sayfa 8 - SON SAYFA -->
+        <div class="page" id="page8">
+            <div class="page8-content">
+                <div class="text-section">
+                    <h2>Seni bekliyorum... ❤️</h2>
+                    <div class="big-heart">❤️</div>
+                </div>
+                
+                <div class="buttons-section">
+                    <button class="end-btn" onclick="closePage()">End</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let clickCount = 0;
+        let noClickCount = 0;
+        let noClickCount6 = 0;
+        let noClickCount7 = 0;
+        let audioFadeInterval;
+        let isAudioPlaying = false;
+        let audioStarted = false;
+        let selectedPhoto = 0;
+        
+        // Audio elementlerini seç
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const audioControl = document.getElementById('audioControl');
+        
+        // Sayfa yüklendiğinde sadece container ayarı yap
+        window.addEventListener('load', function() {
+            const container = document.querySelector('.container');
+            container.style.height = window.innerHeight + 'px';
+        });
+        
+        // "Devam Et" butonuna tıklandığında sesi başlat ve sayfayı değiştir
+        function startAudioAndNextPage() {
+            if (!audioStarted) {
+                startAudio();
+                audioStarted = true;
+            }
+            nextPage(3);
+        }
+        
+        // Ses başlatma fonksiyonu
+        function startAudio() {
+            // Müziği çok kısık sesle başlat (%5 ses)
+            backgroundMusic.volume = 0.05;
+            
+            backgroundMusic.play().then(() => {
+                isAudioPlaying = true;
+                audioControl.textContent = '🔊';
+                startAudioFadeIn();
+                console.log('Müzik başlatıldı - Devam Et butonuna tıklandı');
+            }).catch(error => {
+                console.log('Ses çalma hatası:', error);
+                // Eğer otomatik çalma engellendiyse, kullanıcı butona tıklayınca çal
+                audioControl.textContent = '🔇';
+                alert('Sesi açmak için ses kontrol butonuna tıklayın.');
+            });
+        }
+        
+        // Ses fade-in efekti (15 saniyede tam sese ulaşır)
+        function startAudioFadeIn() {
+            const fadeDuration = 15000; // 15 saniye
+            const steps = 30; // 30 adımda
+            const stepDuration = fadeDuration / steps;
+            const targetVolume = 0.7; // Maksimum ses %70 (daha yumuşak)
+            const initialVolume = 0.05; // Başlangıç sesi %5
+            
+            let currentStep = 0;
+            
+            clearInterval(audioFadeInterval);
+            
+            audioFadeInterval = setInterval(() => {
+                currentStep++;
+                const newVolume = initialVolume + (targetVolume - initialVolume) * (currentStep / steps);
+                backgroundMusic.volume = Math.min(newVolume, targetVolume);
+                
+                console.log('Ses seviyesi:', backgroundMusic.volume);
+                
+                if (currentStep >= steps) {
+                    clearInterval(audioFadeInterval);
+                    console.log('Ses fade-in tamamlandı. Son ses seviyesi:', backgroundMusic.volume);
+                }
+            }, stepDuration);
+        }
+        
+        // Ses aç/kapa butonu
+        function toggleAudio() {
+            if (isAudioPlaying) {
+                backgroundMusic.pause();
+                audioControl.textContent = '🔇';
+                isAudioPlaying = false;
+                console.log('Müzik durduruldu');
+            } else {
+                backgroundMusic.play().then(() => {
+                    audioControl.textContent = '🔊';
+                    isAudioPlaying = true;
+                    console.log('Müzik devam ettirildi');
+                    // Eğer fade-in henüz başlamadıysa başlat
+                    if (backgroundMusic.volume < 0.7) {
+                        startAudioFadeIn();
+                    }
+                }).catch(error => {
+                    console.log('Ses çalma hatası:', error);
+                    alert('Ses çalınamıyor. Lütfen sayfayı yenileyin veya farklı bir tarayıcı deneyin.');
+                });
+            }
+        }
+        
+        function nextPage(pageNumber) {
+            // Tüm sayfaları gizle
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // İstenen sayfayı göster
+            document.getElementById('page' + pageNumber).classList.add('active');
+            
+            // Sayfa 3'e geçtiğimizde butonu sıfırla
+            if (pageNumber === 3) {
+                const button = document.getElementById('movingBtn');
+                button.style.position = 'static';
+                clickCount = 0;
+            }
+            
+            // Sayfa 4'e geçtiğimizde butonları sıfırla
+            if (pageNumber === 4) {
+                const yesBtn = document.getElementById('yesBtn');
+                const noBtn = document.getElementById('noBtn');
+                yesBtn.style.fontSize = '';
+                yesBtn.style.padding = '';
+                yesBtn.style.width = '';
+                noBtn.style.position = 'static';
+                noBtn.style.display = 'block';
+                noClickCount = 0;
+            }
+            
+            // Sayfa 5'e geçtiğimizde seçimleri sıfırla
+            if (pageNumber === 5) {
+                selectedPhoto = 0;
+                
+                // Tüm fotoğraflardan seçili classını kaldır
+                document.querySelectorAll('.photo-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                
+                // Mesajları gizle
+                document.getElementById('selectionMessage').style.display = 'none';
+                document.getElementById('wrongSelectionMessage').style.display = 'none';
+                document.getElementById('tryAgainBtn').style.display = 'none';
+                
+                // Devam et butonunu devre dışı bırak
+                document.getElementById('continueBtn5').disabled = true;
+            }
+            
+            // Sayfa 6'ya geçtiğimizde butonları sıfırla
+            if (pageNumber === 6) {
+                const yesBtn6 = document.getElementById('yesBtn6');
+                const noBtn6 = document.getElementById('noBtn6');
+                yesBtn6.style.fontSize = '';
+                yesBtn6.style.padding = '';
+                yesBtn6.style.width = '';
+                noBtn6.style.position = 'static';
+                noBtn6.style.display = 'block';
+                noClickCount6 = 0;
+            }
+            
+            // Sayfa 7'ye geçtiğimizde butonları sıfırla
+            if (pageNumber === 7) {
+                const noBtn7 = document.getElementById('noBtn7');
+                noBtn7.style.position = 'static';
+                noBtn7.style.display = 'block';
+                noBtn7.textContent = "Hayır";
+                noClickCount7 = 0;
+            }
+        }
+        
+        // Fotoğraf seçme fonksiyonu
+        function selectPhoto(photoNumber) {
+            selectedPhoto = photoNumber;
+            
+            // Tüm fotoğraflardan seçili classını kaldır
+            document.querySelectorAll('.photo-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Seçilen fotoğrafa class ekle
+            const selectedItem = document.querySelectorAll('.photo-item')[photoNumber - 1];
+            selectedItem.classList.add('selected');
+            
+            // DOĞRU SEÇİMLER: 3 (Sol Alt) ve 4 (Sağ Alt)
+            if (photoNumber === 3 || photoNumber === 4) {
+                // Doğru seçim
+                const selectionMessage = document.getElementById('selectionMessage');
+                selectionMessage.style.display = 'block';
+                
+                // Yanlış mesajı gizle
+                document.getElementById('wrongSelectionMessage').style.display = 'none';
+                document.getElementById('tryAgainBtn').style.display = 'none';
+                
+                // Devam et butonunu aktif et
+                document.getElementById('continueBtn5').disabled = false;
+                
+                console.log('Doğru seçim! Fotoğraf:', photoNumber);
+                
+            } else {
+                // Yanlış seçim (1 veya 2 - Üst sıra)
+                const wrongSelectionMessage = document.getElementById('wrongSelectionMessage');
+                wrongSelectionMessage.style.display = 'block';
+                
+                const tryAgainBtn = document.getElementById('tryAgainBtn');
+                tryAgainBtn.style.display = 'block';
+                
+                // Doğru mesajı gizle
+                document.getElementById('selectionMessage').style.display = 'none';
+                
+                // Devam et butonunu devre dışı bırak
+                document.getElementById('continueBtn5').disabled = true;
+                
+                console.log('Yanlış seçim! Fotoğraf:', photoNumber);
+            }
+        }
+        
+        // 6. sayfaya geç
+        function goToPage6() {
+            if (selectedPhoto > 0) {
+                nextPage(6);
+            }
+        }
+        
+        // Tekrar deneme fonksiyonu
+        function resetSelection() {
+            selectedPhoto = 0;
+            
+            // Tüm fotoğraflardan seçili classını kaldır
+            document.querySelectorAll('.photo-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Mesajları gizle
+            document.getElementById('selectionMessage').style.display = 'none';
+            document.getElementById('wrongSelectionMessage').style.display = 'none';
+            document.getElementById('tryAgainBtn').style.display = 'none';
+            
+            // Devam et butonunu devre dışı bırak
+            document.getElementById('continueBtn5').disabled = true;
+        }
+        
+        // Sayfa 6 - Evet butonu
+        function handleYes6() {
+            nextPage(7);
+        }
+        
+        // Sayfa 6 - Hayır butonu
+        function handleNo6() {
+            const yesBtn6 = document.getElementById('yesBtn6');
+            const noBtn6 = document.getElementById('noBtn6');
+            
+            noClickCount6++;
+            
+            // Hayır butonu için özel konumlar
+            switch(noClickCount6) {
+                case 1:
+                    noBtn6.style.position = 'absolute';
+                    noBtn6.style.left = '10px';
+                    noBtn6.style.top = '10px';
+                    noBtn6.style.right = 'auto';
+                    noBtn6.style.bottom = 'auto';
+                    break;
+                case 2:
+                    noBtn6.style.position = 'absolute';
+                    noBtn6.style.left = '50%';
+                    noBtn6.style.top = '50%';
+                    noBtn6.style.transform = 'translateX(-50%)';
+                    noBtn6.style.right = 'auto';
+                    noBtn6.style.bottom = 'auto';
+                    break;
+                case 3:
+                    noBtn6.style.position = 'absolute';
+                    noBtn6.style.right = '10px';
+                    noBtn6.style.top = '10px';
+                    noBtn6.style.left = 'auto';
+                    noBtn6.style.bottom = 'auto';
+                    noBtn6.style.transform = 'none';
+                    break;
+                case 4:
+                    noBtn6.style.position = 'absolute';
+                    noBtn6.style.left = '10px';
+                    noBtn6.style.bottom = '80px';
+                    noBtn6.style.top = 'auto';
+                    noBtn6.style.right = 'auto';
+                    break;
+                case 5:
+                    noBtn6.style.position = 'absolute';
+                    noBtn6.style.right = '10px';
+                    noBtn6.style.bottom = '80px';
+                    noBtn6.style.left = 'auto';
+                    noBtn6.style.top = 'auto';
+                    break;
+                default:
+                    const container = document.querySelector('.container');
+                    const maxX = container.offsetWidth - noBtn6.offsetWidth - 20;
+                    const maxY = container.offsetHeight - noBtn6.offsetHeight - 20;
+                    
+                    const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+                    const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+                    
+                    noBtn6.style.position = 'absolute';
+                    noBtn6.style.left = randomX + 'px';
+                    noBtn6.style.top = randomY + 'px';
+                    noBtn6.style.transform = 'none';
+            }
+            
+            // Evet butonunu daha fazla büyüt
+            const currentSize = parseFloat(window.getComputedStyle(yesBtn6).fontSize);
+            const currentPadding = parseFloat(window.getComputedStyle(yesBtn6).paddingTop);
+            const currentWidth = parseFloat(window.getComputedStyle(yesBtn6).width);
+            
+            yesBtn6.style.fontSize = Math.min(currentSize * 1.3, 40) + 'px';
+            yesBtn6.style.padding = Math.min(currentPadding * 1.4, 35) + 'px ' + Math.min(currentPadding * 2, 60) + 'px';
+            
+            if (currentWidth < window.innerWidth * 0.9) {
+                yesBtn6.style.width = (currentWidth * 1.2) + 'px';
+            }
+            
+            if (noClickCount6 >= 5) {
+                noBtn6.style.display = 'none';
+            }
+        }
+        
+        // Sayfa 7 - Evet butonu
+        function handleYes7() {
+            nextPage(8);
+        }
+        
+        // Sayfa 7 - Hayır butonu
+        function handleNo7() {
+            const noBtn7 = document.getElementById('noBtn7');
+            noBtn7.textContent = "Yanlış seçenek!";
+            setTimeout(() => {
+                noBtn7.textContent = "Hayır";
+            }, 1000);
+        }
+        
+        // End butonu - sayfayı kapat
+        function closePage() {
+            if (confirm("Sayfayı kapatmak istediğinizden emin misiniz?")) {
+                window.close();
+            }
+        }
+        
+        function handleMovingButton() {
+            const checkbox = document.getElementById('agreeCheckbox');
+            const button = document.getElementById('movingBtn');
+            
+            if (!checkbox.checked) {
+                alert("Lütfen önce kutucuğu işaretleyin!");
+                return;
+            }
+            
+            clickCount++;
+            
+            if (clickCount < 3) {
+                // Butonu ekran içinde rastgele bir yere taşı
+                const container = document.querySelector('.container');
+                const maxX = container.offsetWidth - button.offsetWidth - 20;
+                const maxY = container.offsetHeight - button.offsetHeight - 20;
+                
+                const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+                const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+                
+                button.style.position = 'absolute';
+                button.style.left = randomX + 'px';
+                button.style.top = randomY + 'px';
+            } else {
+                // 3. tıklamadan sonra bir sonraki sayfaya geç
+                nextPage(4);
+            }
+        }
+        
+        function handleYes() {
+            // Evet butonuna basınca 5. sayfaya geç
+            nextPage(5);
+        }
+        
+        function handleNo() {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const textSection = document.querySelector('.text-middle');
+            
+            noClickCount++;
+            
+            // Hayır butonu için özel konumlar
+            switch(noClickCount) {
+                case 1:
+                    noBtn.style.position = 'absolute';
+                    noBtn.style.left = '10px';
+                    noBtn.style.top = '10px';
+                    noBtn.style.right = 'auto';
+                    noBtn.style.bottom = 'auto';
+                    break;
+                case 2:
+                    noBtn.style.position = 'absolute';
+                    noBtn.style.left = '50%';
+                    noBtn.style.top = '50%';
+                    noBtn.style.transform = 'translateX(-50%)';
+                    noBtn.style.right = 'auto';
+                    noBtn.style.bottom = 'auto';
+                    break;
+                case 3:
+                    noBtn.style.position = 'absolute';
+                    noBtn.style.right = '10px';
+                    noBtn.style.top = '10px';
+                    noBtn.style.left = 'auto';
+                    noBtn.style.bottom = 'auto';
+                    noBtn.style.transform = 'none';
+                    break;
+                case 4:
+                    noBtn.style.position = 'absolute';
+                    noBtn.style.left = '10px';
+                    noBtn.style.bottom = '80px';
+                    noBtn.style.top = 'auto';
+                    noBtn.style.right = 'auto';
+                    break;
+                case 5:
+                    noBtn.style.position = 'absolute';
+                    noBtn.style.right = '10px';
+                    noBtn.style.bottom = '80px';
+                    noBtn.style.left = 'auto';
+                    noBtn.style.top = 'auto';
+                    break;
+                default:
+                    const container = document.querySelector('.container');
+                    const maxX = container.offsetWidth - noBtn.offsetWidth - 20;
+                    const maxY = container.offsetHeight - noBtn.offsetHeight - 20;
+                    
+                    const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+                    const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+                    
+                    noBtn.style.position = 'absolute';
+                    noBtn.style.left = randomX + 'px';
+                    noBtn.style.top = randomY + 'px';
+                    noBtn.style.transform = 'none';
+            }
+            
+            // Evet butonunu daha fazla büyüt
+            const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            const currentPadding = parseFloat(window.getComputedStyle(yesBtn).paddingTop);
+            const currentWidth = parseFloat(window.getComputedStyle(yesBtn).width);
+            
+            yesBtn.style.fontSize = Math.min(currentSize * 1.3, 40) + 'px';
+            yesBtn.style.padding = Math.min(currentPadding * 1.4, 35) + 'px ' + Math.min(currentPadding * 2, 60) + 'px';
+            
+            if (currentWidth < window.innerWidth * 0.9) {
+                yesBtn.style.width = (currentWidth * 1.2) + 'px';
+            }
+            
+            if (noClickCount >= 5) {
+                noBtn.style.display = 'none';
+            }
+        }
+
+        // Sayfa yüklendiğinde konteyner yüksekliğini ayarla
+        window.addEventListener('resize', function() {
+            const container = document.querySelector('.container');
+            container.style.height = window.innerHeight + 'px';
+        });
+        
+        // Telefon için dokunma olayları
+        document.addEventListener('touchstart', function() {}, {passive: true});
+    </script>
+</body>
+</html>
